@@ -67,8 +67,9 @@ playwright install chromium
 
 4. **Configure environment (for AI mode)**
 ```bash
-cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
+# Create .env file with your API key
+echo "ANTHROPIC_API_KEY=your_api_key_here" > .env
+# Get your key from: https://console.anthropic.com
 ```
 
 ## 📖 Usage
@@ -175,22 +176,32 @@ Robot-Driver-Automation/
 ├── robot_driver.py          # Basic fixed-task automation
 ├── ai_robot_driver.py       # AI-powered dynamic automation
 ├── api.py                   # FastAPI web service
+├── test_basic.py            # Testing utility
 ├── requirements.txt         # Python dependencies
-├── .env.example            # Environment variable template
+├── setup.sh                 # Automated setup script
 ├── .gitignore              # Git ignore patterns
-└── README.md               # This file
+├── README.md               # This file
+├── QUICKSTART.md           # Quick reference guide
+└── SUBMISSION.md           # Evaluation details
 ```
 
 ## 🔧 Configuration
 
 ### Environment Variables
 
-Create a `.env` file for sensitive configuration:
+For AI mode (Optional Challenge 1), create a `.env` file:
 
 ```bash
-# Required for AI Mode (Optional Challenge 1)
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
+# Create the file
+echo "ANTHROPIC_API_KEY=your_actual_key_here" > .env
+
+# The .env file should contain:
+ANTHROPIC_API_KEY=sk-ant-api03-xxxxx...
+
+# Get your API key from https://console.anthropic.com
 ```
+
+**Note:** The `.env` file is gitignored and will never be committed.
 
 ### Customizing Tasks
 

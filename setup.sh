@@ -32,13 +32,12 @@ echo ""
 echo "Installing Playwright browsers..."
 playwright install chromium
 
-# Create .env file if it doesn't exist
+# Remind about .env for AI mode
 if [ ! -f .env ]; then
     echo ""
-    echo "Creating .env file..."
-    cp .env.example .env
-    echo "✓ Created .env file"
-    echo "⚠️  Please edit .env and add your ANTHROPIC_API_KEY for AI mode"
+    echo "⚠️  For AI mode, create a .env file with:"
+    echo "   echo \"ANTHROPIC_API_KEY=your_key\" > .env"
+    echo "   Get key from: https://console.anthropic.com"
 fi
 
 echo ""
