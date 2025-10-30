@@ -119,7 +119,7 @@ cd Robot-Driver-Automation
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
-playwright install chromium
+playwright install
 
 # For AI mode, configure API key
 cp .env.example .env
@@ -280,9 +280,9 @@ python test_basic.py
 
 ### Browser Installation
 - Playwright requires browser binaries
-- Automated via: `playwright install chromium`
+- Automated via: `playwright install`
 - Documented in setup script and README
-- Only Chromium needed (lightweight)
+- Installs all supported browsers
 
 ## 🎯 Conclusion
 

@@ -30,7 +30,7 @@ pip install -r requirements.txt
 # Install Playwright browsers
 echo ""
 echo "Installing Playwright browsers..."
-playwright install chromium
+playwright install
 
 # Remind about .env for AI mode
 if [ ! -f .env ]; then

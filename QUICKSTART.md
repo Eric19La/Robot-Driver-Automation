@@ -10,7 +10,7 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
-playwright install chromium
+playwright install
 ```
 
 ### Step 2: Test Basic Mode (30 seconds)
@@ -114,7 +114,7 @@ open http://localhost:8000/docs
 
 **"playwright: command not found"**
 ```bash
-playwright install chromium
+playwright install
 ```
 
 **"ANTHROPIC_API_KEY not found"**

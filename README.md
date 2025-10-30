@@ -62,7 +62,7 @@ venv\Scripts\activate
 pip install -r requirements.txt
 
 # Install Playwright browsers
-playwright install chromium
+playwright install
 ```
 
 4. **Configure environment (for AI mode)**
@@ -316,7 +316,7 @@ The system handles:
 **Issue: "playwright: command not found"**
 ```bash
 # Make sure to install Playwright browsers
-playwright install chromium
+playwright install
 ```
 
 **Issue: "ANTHROPIC_API_KEY not found"**

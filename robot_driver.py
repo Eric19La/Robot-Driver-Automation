@@ -27,7 +27,7 @@ async def search_product_price(product_name: str = "wireless mouse") -> dict:
 
     try:
         async with async_playwright() as p:
-            # Launch browser
+            # Launch browser (set headless=False to see what's happening)
             browser = await p.chromium.launch(headless=True)
             page = await browser.new_page()
 
@@ -37,13 +37,29 @@ async def search_product_price(product_name: str = "wireless mouse") -> dict:
             # Navigate to Amazon
             print(f"Navigating to Amazon...")
             await page.goto("https://www.amazon.com", wait_until="domcontentloaded")
+            await asyncio.sleep(2)  # Give page time to fully load
 
-            # Wait for search box to be available
+            # Wait for search box to be available (try multiple selectors)
             print(f"Searching for '{product_name}'...")
-            search_box = await page.wait_for_selector(
+            search_box_selectors = [
                 'input[id="twotabsearchtextbox"]',
-                timeout=10000
-            )
+                'input[name="field-keywords"]',
+                'input[type="text"]'
+            ]
+
+            search_box = None
+            for selector in search_box_selectors:
+                try:
+                    search_box = await page.wait_for_selector(selector, timeout=5000)
+                    if search_box:
+                        break
+                except:
+                    continue
+
+            if not search_box:
+                result["message"] = "Could not find search box on Amazon"
+                print(f"\n✗ Error: {result['message']}")
+                return result
 
             # Type product name and search
             await search_box.fill(product_name)
@@ -112,6 +128,12 @@ async def search_product_price(product_name: str = "wireless mouse") -> dict:
     except PlaywrightTimeoutError as e:
         result["message"] = f"Timeout error: Page took too long to load or element not found"
         print(f"\n✗ Error: {result['message']}")
+        if page:
+            try:
+                await page.screenshot(path="error_screenshot.png")
+                print(f"   Screenshot saved to: error_screenshot.png")
+            except:
+                pass
 
     except Exception as e:
         result["message"] = f"Error occurred: {str(e)}"
