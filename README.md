@@ -1,13 +1,13 @@
 # Robot Driver Automation
 
-An intelligent web automation system built with Python and Playwright, featuring both basic scripted tasks and advanced AI-powered dynamic execution using Claude and Model Context Protocol (MCP).
+An intelligent web automation system built with Python and Playwright, featuring both basic scripted tasks and advanced AI-powered dynamic execution using Google Gemini AI and Model Context Protocol (MCP).
 
 ## 🎯 Project Overview
 
 This project demonstrates three levels of web automation capability:
 
 1. **Required Core** - Basic Playwright automation with error handling
-2. **Optional Challenge 1** - AI-powered automation with Claude and MCP
+2. **Optional Challenge 1** - AI-powered automation with Google Gemini AI and MCP
 3. **Optional Challenge 2** - REST API for remote task execution
 
 ## ✨ Features
@@ -20,7 +20,7 @@ This project demonstrates three levels of web automation capability:
 
 ### AI Mode (Optional Challenge 1)
 - 🤖 Dynamic task execution from plain English goals
-- 🧠 Claude AI integration for intelligent decision-making
+- 🧠 Google Gemini AI integration for intelligent decision-making
 - 🔄 Step-by-step plan generation and execution
 - 📊 Page context analysis using accessibility data
 - 🎯 Adaptive behavior based on page state
@@ -68,8 +68,8 @@ playwright install
 4. **Configure environment (for AI mode)**
 ```bash
 # Create .env file with your API key
-echo "ANTHROPIC_API_KEY=your_api_key_here" > .env
-# Get your key from: https://console.anthropic.com
+echo "GEMINI_API_KEY=your_api_key_here" > .env
+# Get your free key from: https://aistudio.google.com/apikey
 ```
 
 ## 📖 Usage
@@ -193,12 +193,12 @@ For AI mode (Optional Challenge 1), create a `.env` file:
 
 ```bash
 # Create the file
-echo "ANTHROPIC_API_KEY=your_actual_key_here" > .env
+echo "GEMINI_API_KEY=your_actual_key_here" > .env
 
 # The .env file should contain:
-ANTHROPIC_API_KEY=sk-ant-api03-xxxxx...
+GEMINI_API_KEY=AIzaSy...
 
-# Get your API key from https://console.anthropic.com
+# Get your free API key from https://aistudio.google.com/apikey
 ```
 
 **Note:** The `.env` file is gitignored and will never be committed.
@@ -268,7 +268,7 @@ The system handles:
 - [x] Clear console output
 
 ### ✅ Optional Challenge 1 (AI + MCP - Advanced Skills)
-- [x] AI Language Model integration (Claude)
+- [x] AI Language Model integration (Google Gemini)
 - [x] Dynamic execution from plain English goals
 - [x] Model Context Protocol integration
 - [x] Structured page context for AI decision-making
@@ -289,7 +289,7 @@ The system handles:
 - Clean code structure and documentation
 
 ### AI & MCP Architecture
-- Claude API integration
+- Google Gemini API integration
 - Dynamic task planning with LLM
 - Structured communication (JSON parsing)
 - Context-aware decision making
@@ -319,10 +319,10 @@ The system handles:
 playwright install
 ```
 
-**Issue: "ANTHROPIC_API_KEY not found"**
+**Issue: "GEMINI_API_KEY not found"**
 ```bash
 # Create .env file and add your API key
-echo "ANTHROPIC_API_KEY=your_key_here" > .env
+echo "GEMINI_API_KEY=your_key_here" > .env
 ```
 
 **Issue: "Module not found"**
@@ -345,17 +345,17 @@ This project is created as a sample submission for internship evaluation.
 Created as part of a software engineering internship application demonstrating skills in:
 - Python software engineering
 - Web automation (Playwright)
-- AI agent architecture (Claude + MCP)
+- AI agent architecture (Gemini AI + MCP)
 - API design and deployment (FastAPI)
 - Software reliability and error handling
 
 ## 🔗 Resources
 
 - [Playwright Documentation](https://playwright.dev/python/)
-- [Anthropic Claude API](https://docs.anthropic.com/)
+- [Google Gemini AI](https://ai.google.dev/)
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 
 ---
 
-**Note:** This is a demonstration project. The AI mode requires an Anthropic API key (paid service). The basic and API modes work without any external dependencies beyond the Python packages listed.
+**Note:** This is a demonstration project. The AI mode requires a Google Gemini API key (free tier available). The basic and API modes work without any external dependencies beyond the Python packages listed.

@@ -61,7 +61,7 @@ async def root():
         },
         "modes": {
             "basic": "Fixed task execution (product search)",
-            "ai": "AI-powered dynamic task execution (requires ANTHROPIC_API_KEY)"
+            "ai": "AI-powered dynamic task execution (requires GEMINI_API_KEY)"
         }
     }
 
@@ -69,13 +69,13 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    anthropic_configured = bool(os.getenv("ANTHROPIC_API_KEY"))
+    gemini_configured = bool(os.getenv("GEMINI_API_KEY"))
 
     return {
         "status": "healthy",
         "features": {
             "basic_mode": True,
-            "ai_mode": anthropic_configured
+            "ai_mode": gemini_configured
         }
     }
 
@@ -106,10 +106,10 @@ async def execute_task(request: TaskRequest):
 
         elif request.mode == "ai":
             # Check if API key is configured
-            if not os.getenv("ANTHROPIC_API_KEY"):
+            if not os.getenv("GEMINI_API_KEY"):
                 raise HTTPException(
                     status_code=503,
-                    detail="AI mode not available: ANTHROPIC_API_KEY not configured"
+                    detail="AI mode not available: GEMINI_API_KEY not configured"
                 )
 
             # Execute AI-powered task

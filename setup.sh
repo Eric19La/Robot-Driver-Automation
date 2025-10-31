@@ -36,8 +36,8 @@ playwright install
 if [ ! -f .env ]; then
     echo ""
     echo "⚠️  For AI mode, create a .env file with:"
-    echo "   echo \"ANTHROPIC_API_KEY=your_key\" > .env"
-    echo "   Get key from: https://console.anthropic.com"
+    echo "   echo \"GEMINI_API_KEY=your_key\" > .env"
+    echo "   Get free key from: https://aistudio.google.com/apikey"
 fi
 
 echo ""
@@ -57,5 +57,5 @@ echo ""
 echo "To start the API server:"
 echo "  python api.py"
 echo ""
-echo "For AI mode, remember to set ANTHROPIC_API_KEY in .env"
+echo "For AI mode, remember to set GEMINI_API_KEY in .env"
 echo "=================================="

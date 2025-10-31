@@ -35,9 +35,9 @@ Searching for 'wireless mouse'...
 
 **Setup (.env file needed):**
 ```bash
-# Create .env file with your Anthropic API key
-echo "ANTHROPIC_API_KEY=sk-ant-api03-your-key-here" > .env
-# Get your key from: https://console.anthropic.com
+# Create .env file with your Google Gemini API key
+echo "GEMINI_API_KEY=your-key-here" > .env
+# Get your free key from: https://aistudio.google.com/apikey
 ```
 
 **Run:**
@@ -80,9 +80,9 @@ curl -X POST http://localhost:8000/execute \
 
 ### ai_robot_driver.py (AI Mode)
 - Accepts plain English goals
-- Uses Claude AI to plan steps
+- Uses Google Gemini AI to plan steps
 - Executes dynamically
-- **Requires:** ANTHROPIC_API_KEY
+- **Requires:** GEMINI_API_KEY
 - **Run:** `python ai_robot_driver.py`
 
 ### api.py (API Mode)
@@ -117,10 +117,10 @@ open http://localhost:8000/docs
 playwright install
 ```
 
-**"ANTHROPIC_API_KEY not found"**
+**"GEMINI_API_KEY not found"**
 ```bash
 # AI mode only - skip if just testing basic mode
-echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
+echo "GEMINI_API_KEY=your-key-here" > .env
 ```
 
 **"Module not found"**

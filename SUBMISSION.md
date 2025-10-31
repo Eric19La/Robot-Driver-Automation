@@ -43,7 +43,7 @@ This submission fulfills **all three sections** of the internship sample project
 **Implementation:** `ai_robot_driver.py`
 
 **Features:**
-- ✅ Execution steps determined dynamically by AI (Claude LLM)
+- ✅ Execution steps determined dynamically by AI (Google Gemini)
 - ✅ Accepts plain English goals from user
 - ✅ Integration with Playwright for page context extraction
 - ✅ Provides structured page information to AI:
@@ -55,7 +55,7 @@ This submission fulfills **all three sections** of the internship sample project
 - ✅ Adaptive behavior based on page state
 
 **AI Architecture:**
-- Uses Anthropic's Claude 3.5 Sonnet model
+- Uses Google's Gemini 2.5 Flash model
 - Structured prompt engineering for reliable JSON responses
 - Page context extraction using accessibility attributes
 - Action loop with reasoning at each step
@@ -122,8 +122,8 @@ pip install -r requirements.txt
 playwright install
 
 # For AI mode, configure API key
-cp .env.example .env
-# Edit .env and add ANTHROPIC_API_KEY
+echo "GEMINI_API_KEY=your_key_here" > .env
+# Get free key from https://aistudio.google.com/apikey
 ```
 
 ### Running the Project
@@ -137,7 +137,7 @@ python test_basic.py
 
 **2. Test AI Mode (Optional Challenge 1):**
 ```bash
-# Requires ANTHROPIC_API_KEY in .env
+# Requires GEMINI_API_KEY in .env
 python ai_robot_driver.py
 ```
 
@@ -171,7 +171,7 @@ curl -X POST "http://localhost:8000/execute" \
 - ✅ Robust fallback mechanisms
 
 ### AI Agent Architecture
-- ✅ LLM integration (Claude API)
+- ✅ LLM integration (Google Gemini API)
 - ✅ Structured prompting for reliable outputs
 - ✅ JSON-based communication protocol
 - ✅ Context extraction and formatting
@@ -247,7 +247,8 @@ python test_basic.py
 - Tests timeout handling and element selection
 - Demonstrates practical automation use case
 
-### Why Claude for AI Mode?
+### Why Gemini for AI Mode?
+- Free tier available with generous limits
 - Strong reasoning capabilities for task planning
 - Reliable JSON output with proper prompting
 - Good at understanding page context
@@ -273,8 +274,8 @@ python test_basic.py
 - Python 3.8+ required
 
 ### API Key Required for AI Mode
-- Optional Challenge 1 requires Anthropic API key
-- Can be obtained from: https://console.anthropic.com
+- Optional Challenge 1 requires Google Gemini API key
+- Free tier available at: https://aistudio.google.com/apikey
 - Basic and API modes work without it
 - Instructions clearly documented in README
 
@@ -289,7 +290,7 @@ python test_basic.py
 This submission demonstrates:
 - ✅ Strong Python programming skills
 - ✅ Web automation expertise (Playwright)
-- ✅ AI integration capabilities (Claude + MCP)
+- ✅ AI integration capabilities (Google Gemini + MCP)
 - ✅ API design and deployment skills (FastAPI)
 - ✅ Software reliability and error handling
 - ✅ Clean code and documentation practices

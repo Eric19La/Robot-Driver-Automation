@@ -1,12 +1,12 @@
 """
 AI Robot Driver - Advanced automation with MCP and LLM
-Uses Playwright MCP Server and Claude to dynamically execute tasks based on plain English goals
+Uses Playwright and Google Gemini AI to dynamically execute tasks based on plain English goals
 """
 import asyncio
 import json
 import os
 from typing import Optional, List, Dict, Any
-from anthropic import Anthropic
+import google.generativeai as genai
 from playwright.async_api import async_playwright, Page, TimeoutError as PlaywrightTimeoutError
 from dotenv import load_dotenv
 
@@ -15,20 +15,21 @@ load_dotenv()
 
 
 class AIRobotDriver:
-    """AI-powered web automation driver using Playwright MCP and Claude"""
+    """AI-powered web automation driver using Playwright and Gemini AI"""
 
     def __init__(self, api_key: Optional[str] = None):
         """
         Initialize the AI Robot Driver
 
         Args:
-            api_key: Anthropic API key (if not provided, loads from ANTHROPIC_API_KEY env var)
+            api_key: Google Gemini API key (if not provided, loads from GEMINI_API_KEY env var)
         """
-        self.api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+        self.api_key = api_key or os.getenv("GEMINI_API_KEY")
         if not self.api_key:
-            raise ValueError("ANTHROPIC_API_KEY not found. Set it in .env file or pass as parameter.")
+            raise ValueError("GEMINI_API_KEY not found. Set it in .env file or pass as parameter.")
 
-        self.client = Anthropic(api_key=self.api_key)
+        genai.configure(api_key=self.api_key)
+        self.model = genai.GenerativeModel('gemini-2.5-flash')
         self.page: Optional[Page] = None
         self.browser = None
         self.playwright = None
@@ -58,6 +59,12 @@ class AIRobotDriver:
             for i, elem in enumerate(elements[:20]):  # Limit to first 20 elements
                 try:
                     tag = await elem.evaluate('el => el.tagName')
+                    input_type = await elem.get_attribute('type')
+
+                    # Skip submit buttons when reporting to AI
+                    if tag == 'INPUT' and input_type == 'submit':
+                        continue
+
                     text = await elem.inner_text() if tag != 'INPUT' else ''
                     role = await elem.get_attribute('role') or tag.lower()
                     aria_label = await elem.get_attribute('aria-label')
@@ -66,8 +73,9 @@ class AIRobotDriver:
                     name = await elem.get_attribute('name')
 
                     element_info = {
-                        "index": i,
+                        "index": len(context["elements"]),  # Use actual index in filtered list
                         "tag": tag.lower(),
+                        "type": input_type,
                         "role": role,
                         "text": text.strip()[:50] if text else "",
                         "aria_label": aria_label,
@@ -98,7 +106,9 @@ class AIRobotDriver:
             Formatted prompt string
         """
         elements_str = "\n".join([
-            f"  - [{e['index']}] {e['tag']} (role: {e['role']}): "
+            f"  - [{e['index']}] {e['tag']}" +
+            (f" type={e['type']}" if e.get('type') else "") +
+            f" (role: {e['role']}): "
             f"text='{e['text']}', id='{e['id']}', name='{e['name']}', "
             f"aria-label='{e['aria_label']}', placeholder='{e['placeholder']}'"
             for e in context.get("elements", [])
@@ -178,18 +188,24 @@ Examples:
                 return True
 
             elif action_type == "type":
-                if target.isdigit():
-                    elements = await self.page.query_selector_all('input, textarea')
-                    idx = int(target)
-                    if idx < len(elements):
-                        await elements[idx].fill(value)
-                    else:
-                        print(f"    ✗ Element index {idx} out of range")
-                        return False
-                else:
-                    await self.page.fill(target, value)
-                await asyncio.sleep(0.5)
-                return True
+                # Always try to find text inputs by common patterns first
+                try:
+                    # Try common search box selectors
+                    search_box = await self.page.query_selector(
+                        'input[name="field-keywords"], input[id*="search"], '
+                        'input[type="search"], input[type="text"]'
+                    )
+                    if search_box:
+                        await search_box.fill(value)
+                        # Also press Enter to submit
+                        await search_box.press("Enter")
+                        await asyncio.sleep(2)
+                        return True
+                except Exception as e:
+                    print(f"    ✗ Error typing: {e}")
+                    return False
+
+                return False
 
             elif action_type == "wait":
                 await self.page.wait_for_selector(target, timeout=10000)
@@ -250,14 +266,11 @@ Examples:
 
                 print(f"Step {step + 1}: Analyzing page and planning action...")
 
-                response = self.client.messages.create(
-                    model="claude-3-5-sonnet-20241022",
-                    max_tokens=1024,
-                    messages=[{"role": "user", "content": prompt}]
-                )
+                # Call Gemini AI
+                response = self.model.generate_content(prompt)
 
                 # Parse AI response
-                response_text = response.content[0].text.strip()
+                response_text = response.text.strip()
 
                 # Extract JSON from response
                 if "```json" in response_text:
@@ -325,7 +338,8 @@ async def main():
 
     except ValueError as e:
         print(f"Configuration Error: {e}")
-        print("Please set ANTHROPIC_API_KEY in your .env file")
+        print("Please set GEMINI_API_KEY in your .env file")
+        print("Get your free API key from: https://aistudio.google.com/apikey")
 
 
 if __name__ == "__main__":
