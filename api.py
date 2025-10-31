@@ -3,7 +3,7 @@ FastAPI Web Service for Robot Driver
 Provides HTTP endpoints to execute automation tasks remotely
 """
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
 from pydantic import BaseModel, Field
 from typing import Optional, Literal
 import asyncio
@@ -48,22 +48,127 @@ class TaskResponse(BaseModel):
     product: Optional[str] = None
 
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def root():
     """Root endpoint with API information"""
-    return {
-        "name": "Robot Driver Automation API",
-        "version": "1.0.0",
-        "endpoints": {
-            "POST /execute": "Execute an automation task",
-            "GET /health": "Health check endpoint",
-            "GET /docs": "Interactive API documentation"
-        },
-        "modes": {
-            "basic": "Fixed task execution (product search)",
-            "ai": "AI-powered dynamic task execution (requires GEMINI_API_KEY)"
-        }
-    }
+    gemini_configured = bool(os.getenv("GEMINI_API_KEY"))
+
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Robot Driver Automation API</title>
+        <style>
+            body {{
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                max-width: 800px;
+                margin: 50px auto;
+                padding: 20px;
+                background: #f5f5f5;
+            }}
+            .container {{
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }}
+            h1 {{
+                color: #333;
+                border-bottom: 3px solid #4CAF50;
+                padding-bottom: 10px;
+            }}
+            .endpoint {{
+                background: #f9f9f9;
+                padding: 15px;
+                margin: 10px 0;
+                border-left: 4px solid #4CAF50;
+                border-radius: 4px;
+            }}
+            .endpoint strong {{
+                color: #4CAF50;
+            }}
+            .status {{
+                display: inline-block;
+                padding: 5px 10px;
+                border-radius: 4px;
+                font-size: 14px;
+                margin-left: 10px;
+            }}
+            .enabled {{
+                background: #4CAF50;
+                color: white;
+            }}
+            .disabled {{
+                background: #ff9800;
+                color: white;
+            }}
+            a {{
+                color: #4CAF50;
+                text-decoration: none;
+            }}
+            a:hover {{
+                text-decoration: underline;
+            }}
+            code {{
+                background: #f4f4f4;
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-family: monospace;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🤖 Robot Driver Automation API</h1>
+            <p><strong>Version:</strong> 1.0.0</p>
+            <p>Network-accessible automation service using Playwright and AI</p>
+
+            <h2>📡 Available Endpoints</h2>
+
+            <div class="endpoint">
+                <strong>POST /execute</strong> - Execute an automation task
+                <br><small>Send a task message to automate web actions</small>
+            </div>
+
+            <div class="endpoint">
+                <strong>GET /health</strong> - <a href="/health">Health check endpoint</a>
+                <br><small>Check service status and available features</small>
+            </div>
+
+            <div class="endpoint">
+                <strong>GET /docs</strong> - <a href="/docs">Interactive API documentation</a>
+                <br><small>Swagger UI for testing endpoints</small>
+            </div>
+
+            <h2>🎯 Execution Modes</h2>
+
+            <div class="endpoint">
+                <strong>Basic Mode</strong> <span class="status enabled">Available</span>
+                <br><small>Fixed task execution (product search on Amazon)</small>
+            </div>
+
+            <div class="endpoint">
+                <strong>AI Mode</strong> <span class="status {'enabled' if gemini_configured else 'disabled'}">
+                    {'Available' if gemini_configured else 'Configure GEMINI_API_KEY'}
+                </span>
+                <br><small>AI-powered dynamic task execution using Google Gemini</small>
+            </div>
+
+            <h2>🚀 Quick Start</h2>
+            <p>Test the API using curl:</p>
+            <pre><code>curl -X POST "http://localhost:8000/execute" \\
+  -H "Content-Type: application/json" \\
+  -d '{{"message": "test", "mode": "basic"}}'</code></pre>
+
+            <p>Or use the <a href="/docs">interactive documentation</a> to test endpoints in your browser.</p>
+
+            <h2>📚 Documentation</h2>
+            <p>See the README.md file for complete setup instructions and usage examples.</p>
+        </div>
+    </body>
+    </html>
+    """
+    return html_content
 
 
 @app.get("/health")
