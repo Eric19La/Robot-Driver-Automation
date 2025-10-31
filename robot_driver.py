@@ -58,7 +58,7 @@ async def search_product_price(product_name: str = "wireless mouse") -> dict:
 
             if not search_box:
                 result["message"] = "Could not find search box on Amazon"
-                print(f"\n✗ Error: {result['message']}")
+                print(f"\n Error: {result['message']}")
                 return result
 
             # Type product name and search
@@ -117,17 +117,17 @@ async def search_product_price(product_name: str = "wireless mouse") -> dict:
                 result["success"] = True
                 result["message"] = f"Success! Product '{product_title[:50]}...' found"
                 result["price"] = price_text.strip()
-                print(f"\n✓ Success! Product: {product_title[:50]}...")
-                print(f"✓ Price: {price_text}")
+                print(f"\n Success! Product: {product_title[:50]}...")
+                print(f" Price: {price_text}")
             else:
                 result["message"] = "Product found but price not available"
-                print(f"\n⚠ Warning: Product found but price not displayed")
+                print(f"\n Warning: Product found but price not displayed")
 
             await browser.close()
 
     except PlaywrightTimeoutError as e:
         result["message"] = f"Timeout error: Page took too long to load or element not found"
-        print(f"\n✗ Error: {result['message']}")
+        print(f"\n Error: {result['message']}")
         if page:
             try:
                 await page.screenshot(path="error_screenshot.png")
@@ -137,7 +137,7 @@ async def search_product_price(product_name: str = "wireless mouse") -> dict:
 
     except Exception as e:
         result["message"] = f"Error occurred: {str(e)}"
-        print(f"\n✗ Error: {result['message']}")
+        print(f"\n Error: {result['message']}")
 
     finally:
         if browser:

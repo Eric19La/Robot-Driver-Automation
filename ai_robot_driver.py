@@ -163,7 +163,7 @@ Examples:
             target = action.get("target", "")
             value = action.get("value", "")
 
-            print(f"  → {action_type.upper()}: {action.get('reasoning', '')}")
+            print(f"  -> {action_type.upper()}: {action.get('reasoning', '')}")
 
             if action_type == "navigate":
                 await self.page.goto(target, wait_until="domcontentloaded")
@@ -180,7 +180,7 @@ Examples:
                     if idx < len(elements):
                         await elements[idx].click()
                     else:
-                        print(f"    ✗ Element index {idx} out of range")
+                        print(f"      Element index {idx} out of range")
                         return False
                 else:
                     await self.page.click(target)
@@ -202,7 +202,7 @@ Examples:
                         await asyncio.sleep(2)
                         return True
                 except Exception as e:
-                    print(f"    ✗ Error typing: {e}")
+                    print(f"     Error typing: {e}")
                     return False
 
                 return False
@@ -215,14 +215,14 @@ Examples:
                 return True
 
             else:
-                print(f"    ✗ Unknown action type: {action_type}")
+                print(f"     Unknown action type: {action_type}")
                 return False
 
         except PlaywrightTimeoutError:
-            print(f"    ✗ Timeout waiting for element: {target}")
+            print(f"     Timeout waiting for element: {target}")
             return False
         except Exception as e:
-            print(f"    ✗ Error executing action: {e}")
+            print(f"     Error executing action: {e}")
             return False
 
     async def execute_goal(self, goal: str, max_steps: int = 15) -> Dict[str, Any]:
@@ -281,32 +281,32 @@ Examples:
                 try:
                     action = json.loads(response_text)
                 except json.JSONDecodeError:
-                    print(f"  ✗ Could not parse AI response as JSON")
+                    print(f"   Could not parse AI response as JSON")
                     continue
 
                 # Check if done
                 if action.get("action") == "done":
                     result["success"] = True
                     result["message"] = f"Goal completed: {action.get('reasoning', '')}"
-                    print(f"\n✓ {result['message']}")
+                    print(f"\n  {result['message']}")
                     break
 
                 # Execute action
                 success = await self.execute_action(action)
 
                 if not success:
-                    print(f"  ⚠ Action failed, will try alternative approach")
+                    print(f"   Action failed, will try alternative approach")
 
                 # Small delay between actions
                 await asyncio.sleep(1)
 
             if not result["success"]:
                 result["message"] = f"Reached maximum steps ({max_steps}) without completing goal"
-                print(f"\n⚠ {result['message']}")
+                print(f"\n {result['message']}")
 
         except Exception as e:
             result["message"] = f"Error: {str(e)}"
-            print(f"\n✗ {result['message']}")
+            print(f"\n {result['message']}")
 
         finally:
             # Cleanup
