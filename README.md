@@ -101,17 +101,7 @@ PRICE: $18.99
 
 **Demo Video:**
 
-> **TODO:** Add a demo video or GIF showing the Required Core in action.
->
-> You can record your terminal using:
-> - [asciinema](https://asciinema.org/) - Terminal recorder
-> - [ttygif](https://github.com/icholy/ttygif) - Terminal to GIF
-> - Screen recording tools (QuickTime, OBS, etc.)
->
-> Then upload to GitHub and embed here:
-> ```markdown
-> ![Basic Mode Demo](path/to/demo.gif)
-> ```
+https://github.com/user-attachments/assets/e28b5976-777d-4651-b6a3-4af9098e6987
 
 ### 2. AI Mode - Dynamic Task Execution
 
